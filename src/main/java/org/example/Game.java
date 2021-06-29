@@ -17,7 +17,6 @@ import javafx.util.Duration;
 import static org.example.App.*;
 
 public class Game {
-    public static int angle = 0;
     public static void startGame(int i) {
         Group playfieldLayout = new Group();
         Scene sceneGAME = new Scene(playfieldLayout,winWidth,winHeight);
@@ -59,17 +58,20 @@ public class Game {
         hpT.setLayoutY(55);
         Player mainP = new Player(i);
 
-        playfieldLayout.getChildren().add(mainP.pic);
+        ImageView playerBody = mainP.pic;
+
+        playfieldLayout.getChildren().add(playerBody);
         playfieldLayout.getChildren().add(hpT);
         playfieldLayout.getChildren().add(hT);
+
         sceneGAME.setOnKeyPressed((keyEvent -> {
             mainP.takeAngle();
-            if ((keyEvent.getCode() == KeyCode.A || keyEvent.getCode() == KeyCode.LEFT) && angle<30){
-                hT.setText(String.valueOf(angle));
-                angle++;}
-            if ((keyEvent.getCode() == KeyCode.D || keyEvent.getCode() == KeyCode.RIGHT) && angle>-30){
-                hT.setText(String.valueOf(angle));
-                angle--;}
+            if ((keyEvent.getCode() == KeyCode.A || keyEvent.getCode() == KeyCode.LEFT) && mainP.angle>-30){
+                hT.setText(String.valueOf(mainP.angle));
+                mainP.angle--;}
+            if ((keyEvent.getCode() == KeyCode.D || keyEvent.getCode() == KeyCode.RIGHT) && mainP.angle<30){
+                hT.setText(String.valueOf(mainP.angle));
+                mainP.angle++;}
         }));
 
 
@@ -82,9 +84,7 @@ Thread gameCycle = new Thread(() -> {
     long startTime = System.currentTimeMillis();
     long lastCycle = startTime;
 Timeline guiAnim = new Timeline(new KeyFrame(Duration.millis(100), event -> {
-        //SET PLAYER STATE
-        //UPDATE UI
-
+    playerBody.setImage(mainP.takeAngle().getImage());
         hpT.setText(String.valueOf(mainP.hp));
     }));
     guiAnim.setCycleCount(Timeline.INDEFINITE);
@@ -97,11 +97,10 @@ Timeline guiAnim = new Timeline(new KeyFrame(Duration.millis(100), event -> {
         while (startTime - lastCycle > 150){
             levprogress.setWidth((double) (4*winWidth/5)*progress/10000);
             levprogress.setTranslateX(5 + (double)winWidth/5 + levprogress.getWidth()/2);
-            if(angle>0){
+            if(mainP.angle>0){
                 mainP.angle--;}
-            if(angle<0){
+            if(mainP.angle<0){
                 mainP.angle++;}
-            mainP.takeAngle();
             hT.setText(String.valueOf(mainP.angle));
             progress++;
             lastCycle = System.currentTimeMillis();

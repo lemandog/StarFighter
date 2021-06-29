@@ -10,20 +10,24 @@ public class Player {
     public int hp;
     public int angle;
         public Player(int level){
-            Coordinates = new double[] {App.winHeight - 60,(double) App.winWidth/2};
+            Coordinates = new double[] {App.winHeight - 100,(double) App.winWidth/2};
             hp = 200  + 40*level;
             angle = 0;
-            takeAngle();
-        }
-        public void takeAngle(){
-            Image resPic;
-            String tarRes = String.format("%04d", angle);
-            if(angle<0){
-                resPic = new Image("rotation/CR/" +tarRes+".png",40,40,false,false);
-            } else {
-                resPic = new Image("rotation/CL/" +tarRes+".png",40,40,false,false);
-            }
+            pic = takeAngle();
+            pic.setY(Coordinates[0]);
+            pic.setX(Coordinates[1]);
 
-            pic = new ImageView(resPic);
+        }
+        public ImageView takeAngle(){
+            Image resPic;
+            String tarRes = String.format("%04d", Math.abs(angle));
+            if(angle<0){
+                resPic = new Image("rotation/CL/" +tarRes+".png",80,80,false,false);
+            } else {
+                resPic = new Image("rotation/CR/" +tarRes+".png",80,80,false,false);
+            }
+            ImageView res = new ImageView();
+            res.setImage(resPic);
+            return res;
         }
 }
