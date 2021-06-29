@@ -51,6 +51,13 @@ public class Game {
         hT.setLayoutX((float)winWidth/5);
         hT.setLayoutY((float)winHeight/5);
 
+        Text pause = new Text("GAME IS PAUSED!");
+        pause.setFont(GameMenu.font);
+        pause.setFill(Utility.getColorFromPallete(2));
+        pause.setLayoutX((float)winWidth/4);
+        pause.setLayoutY((float)winHeight/2);
+        pause.setVisible(false);
+
         Text hpT = new Text("200");
         hpT.setFont(GameMenu.font);
         hpT.setFill(Utility.getColorFromPallete(7));
@@ -63,17 +70,7 @@ public class Game {
         playfieldLayout.getChildren().add(playerBody);
         playfieldLayout.getChildren().add(hpT);
         playfieldLayout.getChildren().add(hT);
-
-        sceneGAME.setOnKeyPressed((keyEvent -> {
-            mainP.takeAngle();
-            if ((keyEvent.getCode() == KeyCode.A || keyEvent.getCode() == KeyCode.LEFT) && mainP.angle>-30){
-                hT.setText(String.valueOf(mainP.angle));
-                mainP.angle--;}
-            if ((keyEvent.getCode() == KeyCode.D || keyEvent.getCode() == KeyCode.RIGHT) && mainP.angle<30){
-                hT.setText(String.valueOf(mainP.angle));
-                mainP.angle++;}
-        }));
-
+        playfieldLayout.getChildren().add(pause);
 
 
 Thread gameCycle = new Thread(() -> {
@@ -83,12 +80,6 @@ Thread gameCycle = new Thread(() -> {
     boolean endNotMet = true;
     long startTime = System.currentTimeMillis();
     long lastCycle = startTime;
-Timeline guiAnim = new Timeline(new KeyFrame(Duration.millis(100), event -> {
-    playerBody.setImage(mainP.takeAngle().getImage());
-        hpT.setText(String.valueOf(mainP.hp));
-    }));
-    guiAnim.setCycleCount(Timeline.INDEFINITE);
-    guiAnim.play();
 
     while(playerIsAlive && endNotMet){
         startTime = System.currentTimeMillis();
@@ -104,13 +95,41 @@ Timeline guiAnim = new Timeline(new KeyFrame(Duration.millis(100), event -> {
             hT.setText(String.valueOf(mainP.angle));
             progress++;
             lastCycle = System.currentTimeMillis();
-            System.out.println((double) (4*winWidth/5)*progress/10000);
         }
     }
-
 });
         gameCycle.start();
+        Timeline guiAnim = new Timeline(new KeyFrame(Duration.millis(50), event -> {
+            System.out.println(playerBody.getX());
+
+            if(playerBody.getX()<winWidth && playerBody.getX()>0){
+                playerBody.setX(mainP.angle + playerBody.getX());
+            } else {
+                if(playerBody.getX()>=winWidth){
+                    playerBody.setX(1);}
+                if(playerBody.getX()<=0){
+                    playerBody.setX(winWidth-20);}
+            }
+
+            playerBody.setImage(mainP.takeAngle().getImage());
+            hpT.setText(String.valueOf(mainP.hp));
+        }));
+
+        guiAnim.setCycleCount(Timeline.INDEFINITE);
+        guiAnim.play();
+
+        sceneGAME.setOnKeyPressed((keyEvent -> {
+            mainP.takeAngle();
+            if ((keyEvent.getCode() == KeyCode.A || keyEvent.getCode() == KeyCode.LEFT) && mainP.angle>-30){
+                hT.setText(String.valueOf(mainP.angle));
+                mainP.angle--;}
+            if ((keyEvent.getCode() == KeyCode.D || keyEvent.getCode() == KeyCode.RIGHT) && mainP.angle<30){
+                hT.setText(String.valueOf(mainP.angle));
+                mainP.angle++;}
+        }));
+
     }
+
 
 
     public static void startSpecialGame() {
