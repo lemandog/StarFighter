@@ -10,10 +10,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Utility {
-    static private final Image palette = new Image("/utility/pallete1.png");
+    static private final Image palette = new Image(getImageRes("/utility/pallete1.png"));
     static private final PixelReader inPix = palette.getPixelReader();
 
     public static Color getColorFromPallete(int i) {
@@ -107,5 +108,7 @@ public class Utility {
             e.printStackTrace();
         }
     }
-
+    public static String getImageRes(String path) {
+       return Objects.requireNonNull(Utility.class.getResource(path)).toExternalForm();
+    }
 }

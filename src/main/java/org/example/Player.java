@@ -22,9 +22,9 @@ public class Player {
             Image resPic;
             String tarRes = String.format("%04d", Math.abs(angle));
             if(angle<0){
-                resPic = new Image("rotation/CL/" +tarRes+".png",80,80,false,false);
+                resPic = new Image(Utility.getImageRes("/rotation/CL/" +tarRes+".png"),80,80,false,false);
             } else {
-                resPic = new Image("rotation/CR/" +tarRes+".png",80,80,false,false);
+                resPic = new Image(Utility.getImageRes("/rotation/CR/" +tarRes+".png"),80,80,false,false);
             }
             ImageView res = new ImageView();
             res.setImage(resPic);

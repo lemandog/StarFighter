@@ -20,12 +20,12 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
         guiStage = stage;
-        sceneMM = new Scene(GameMenu.construct(),winWidth,winHeight);
+        sceneMM = new Scene(GameMenu.construct(), winWidth, winHeight);
         MenuSelector.startup();
         sceneMM.setFill(Color.BLACK);
         guiStage.setTitle("STARFIGHTER");
 
-        Image icon = new Image("/menu/icon.png");
+        Image icon = new Image(Utility.getImageRes("/menu/icon.png"));
         guiStage.getIcons().add(icon);
 
         guiStage.setResizable(false);
@@ -33,16 +33,16 @@ public class App extends Application {
         guiStage.show();
 
         sceneMM.setOnKeyPressed((keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.S){
+            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.S) {
                 MenuSelector.buttonFunc.next();
             }
-            if (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.W){
+            if (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.W) {
                 MenuSelector.buttonFunc.prev();
             }
-            if (keyEvent.getCode() == KeyCode.SPACE || keyEvent.getCode() == KeyCode.ENTER){
+            if (keyEvent.getCode() == KeyCode.SPACE || keyEvent.getCode() == KeyCode.ENTER) {
                 MenuSelector.buttonFunc.func();
             }
-            if (keyEvent.getCode() == KeyCode.F1){
+            if (keyEvent.getCode() == KeyCode.F1) {
                 MenuSelector.buttonFunc.special();
             }
             MenuSelector.checkText();

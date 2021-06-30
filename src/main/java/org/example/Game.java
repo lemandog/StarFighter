@@ -27,10 +27,10 @@ public class Game {
         mainStage.setScene(sceneGAME);
         sceneGAME.setFill(Color.BLACK);
 
-        ImageView gui = new ImageView("menu/GUI2.png");
+        ImageView gui = new ImageView(Utility.getImageRes("/menu/GUI2.png"));
         gui.setX(0);
         gui.setY(0);
-        ImageView backgr = new ImageView("levelbackgr/lvl"+ i +".png");
+        ImageView backgr = new ImageView(Utility.getImageRes("/levelbackgr/lvl"+ i +".png"));
         backgr.setX(0);
         backgr.setY(0);
 
@@ -141,10 +141,10 @@ Thread gameCycle = new Thread(() -> {
         mainStage.setScene(sceneGAME);
         sceneGAME.setFill(Color.BLACK);
 
-        ImageView gui = new ImageView("menu/GUI2.png");
+        ImageView gui = new ImageView(Utility.getImageRes("/menu/GUI2.png"));
         gui.setX(0);
         gui.setY(0);
-        ImageView backgr = new ImageView("levelbackgr/lvl0.png");
+        ImageView backgr = new ImageView(Utility.getImageRes("/levelbackgr/lvl0.png"));
         backgr.setX(0);
         backgr.setY(0);
 
