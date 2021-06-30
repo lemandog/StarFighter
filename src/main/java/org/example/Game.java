@@ -162,7 +162,7 @@ Thread gameCycle = new Thread(() -> {
         playfieldLayout.getChildren().add(levprogress);
 
 
-        Text hpT = new Text("Speed is 300 000km/s. ");
+        Text hpT = new Text("Speed is 38240 c ");
         hpT.setFont(GameMenu.font);
         hpT.setFill(Utility.getColorFromPallete(7));
         hpT.setLayoutX(15);
@@ -205,7 +205,7 @@ Thread gameCycle = new Thread(() -> {
         AtomicBoolean checkWall = new AtomicBoolean(false);
         Thread gameCycle = new Thread(() -> {
             double progress = 0;
-            double speed = 300000;
+            double speed = 1.147e+10;
             boolean endNotMet = true;
             long startTime = System.currentTimeMillis();
             long lastCycle = startTime;
