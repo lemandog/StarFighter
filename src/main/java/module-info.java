@@ -1,5 +1,5 @@
 module org.example {
     requires javafx.controls;
-    requires java.sql;
+    requires javafx.base;
     exports org.example;
 }
