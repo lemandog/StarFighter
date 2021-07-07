@@ -28,11 +28,7 @@ public class Game {
         sceneGAME.setFill(Color.BLACK);
 
         ImageView gui = new ImageView(Utility.getImageRes("/menu/GUI2.png"));
-        gui.setX(0);
-        gui.setY(0);
         ImageView backgr = new ImageView(Utility.getImageRes("/levelbackgr/lvl"+ i +".png"));
-        backgr.setX(0);
-        backgr.setY(0);
 
         Box levprogress = new Box();
         levprogress.setHeight(30);
@@ -46,12 +42,6 @@ public class Game {
         playfieldLayout.getChildren().add(backgr);
         playfieldLayout.getChildren().add(gui);
         playfieldLayout.getChildren().add(levprogress);
-
-        Text hT = new Text("HELLO THERE");
-        hT.setFont(GameMenu.font);
-        hT.setFill(Utility.getColorFromPallete(7));
-        hT.setLayoutX((float)winWidth/5);
-        hT.setLayoutY((float)winHeight/5);
 
         Text pause = new Text("GAME IS PAUSED!");
         pause.setFont(GameMenu.font);
@@ -71,7 +61,6 @@ public class Game {
 
         playfieldLayout.getChildren().add(playerBody);
         playfieldLayout.getChildren().add(hpT);
-        playfieldLayout.getChildren().add(hT);
         playfieldLayout.getChildren().add(pause);
 
 Thread gameCycle = new Thread(() -> {
@@ -93,7 +82,6 @@ Thread gameCycle = new Thread(() -> {
                 mainP.angle--;}
             if(mainP.angle<0){
                 mainP.angle++;}
-            hT.setText(String.valueOf(mainP.angle));
             progress++;
             lastCycle = System.currentTimeMillis();
         }
@@ -122,10 +110,8 @@ Thread gameCycle = new Thread(() -> {
         sceneGAME.setOnKeyPressed((keyEvent -> {
             mainP.takeAngle();
             if ((keyEvent.getCode() == KeyCode.A || keyEvent.getCode() == KeyCode.LEFT) && mainP.angle>-30){
-                hT.setText(String.valueOf(mainP.angle));
                 mainP.angle--;}
             if ((keyEvent.getCode() == KeyCode.D || keyEvent.getCode() == KeyCode.RIGHT) && mainP.angle<30){
-                hT.setText(String.valueOf(mainP.angle));
                 mainP.angle++;}
         }));
 

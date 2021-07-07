@@ -21,9 +21,6 @@ public class GameMenu {
         Image backg3 = new Image(Utility.getImageRes("/backg/backgPL" + picOfChoice + ".png"), winWidth, winHeight, false, false);
         ImageView backgV3 = new ImageView(backg3);
         menu.getChildren().add(backgV3);
-
-        logo.setX(0);
-        logo.setY(0);
         menu.getChildren().add(logo);//Logo is on top
         return menu;
     }
