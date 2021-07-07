@@ -26,7 +26,7 @@ public class Utility {
 
     public static void constructInfoFrame() {
         BorderPane layout = new BorderPane();
-        Image backg = new Image("menu/info.png",960,550, false, false);
+        Image backg = new Image(getImageRes("/menu/info.png"),960,550, false, false);
         ImageView backgV3 = new ImageView(backg);
         backgV3.setOpacity(0.4);
 
@@ -54,7 +54,7 @@ public class Utility {
         Stage info = new Stage();
         info.setResizable(false);
         info.setTitle("CONTROLS and INFO");
-        Image icon = new Image("/menu/icon.png");
+        Image icon = new Image(getImageRes("/menu/icon.png"));
         info.getIcons().add(icon);
 
         Scene infoData = new Scene(layout,960,550);
