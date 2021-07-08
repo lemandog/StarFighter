@@ -68,13 +68,13 @@ public class Utility {
 
     public static int getAvailableLevels(){
         try {
-            Scanner scanner = new Scanner(new File("save.txt"));
+            Scanner scanner = new Scanner(new File("src/main/resources/save.txt"));
             MenuSelectorLevel.status.setText("Save file found");
             return scanner.nextInt();
         } catch (FileNotFoundException e) {
             MenuSelectorLevel.status.setText("New save created");
             try {
-                PrintWriter out = new PrintWriter("save.txt");
+                PrintWriter out = new PrintWriter("src/main/resources/save.txt");
                 out.print(6);
                 out.close();
                 return 6;
@@ -86,9 +86,9 @@ public class Utility {
     }
     public static void progressLevel(){
         try {
-            Scanner scanner = new Scanner(new File("save.txt"));
+            Scanner scanner = new Scanner(new File("src/main/resources/save.txt"));
             System.out.println("Save file found and read");
-            PrintWriter out = new PrintWriter("save.txt");
+            PrintWriter out = new PrintWriter("src/main/resources/save.txt");
             out.print(scanner.nextInt()-1);
         } catch (FileNotFoundException e) {
             System.out.println("No save file found. Creating new...");

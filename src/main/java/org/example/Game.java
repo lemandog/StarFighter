@@ -62,7 +62,7 @@ public class Game {
         playfieldLayout.getChildren().add(playerBody);
         playfieldLayout.getChildren().add(hpT);
         playfieldLayout.getChildren().add(pause);
-
+        Enemy.constructEnemyFromFile(i);
 Thread gameCycle = new Thread(() -> {
     int progress = 0;
 
