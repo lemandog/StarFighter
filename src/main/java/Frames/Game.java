@@ -1,4 +1,4 @@
-package org.example;
+package Frames;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -12,14 +12,20 @@ import javafx.scene.shape.Box;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.example.*;
 
 
+import java.util.Queue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.example.App.*;
+import static Frames.App.*;
 
 public class Game {
+    static int score = 0;
     public static void startGame(int i) {
+        int levelLen = Utility.loadLevel(i);
+        Queue<Enemy> thisGameList = Enemy.constructEnemyFromFile(i);
+
         Group playfieldLayout = new Group();
         Scene sceneGAME = new Scene(playfieldLayout,winWidth,winHeight);
         Stage mainStage = App.getStage();
@@ -43,39 +49,30 @@ public class Game {
         playfieldLayout.getChildren().add(gui);
         playfieldLayout.getChildren().add(levprogress);
 
-        Text pause = new Text("GAME IS PAUSED!");
-        pause.setFont(GameMenu.font);
-        pause.setFill(Utility.getColorFromPallete(2));
-        pause.setLayoutX((float)winWidth/4);
-        pause.setLayoutY((float)winHeight/2);
-        pause.setVisible(false);
-
         Text hpT = new Text("200");
         hpT.setFont(GameMenu.font);
         hpT.setFill(Utility.getColorFromPallete(7));
         hpT.setLayoutX(15);
         hpT.setLayoutY(55);
+
         Player mainP = new Player(i);
 
         ImageView playerBody = mainP.pic;
 
         playfieldLayout.getChildren().add(playerBody);
         playfieldLayout.getChildren().add(hpT);
-        playfieldLayout.getChildren().add(pause);
-        Enemy.constructEnemyFromFile(i);
+
 Thread gameCycle = new Thread(() -> {
     int progress = 0;
-
     boolean playerIsAlive = true;
     boolean endNotMet = true;
     long startTime = System.currentTimeMillis();
     long lastCycle = startTime;
-
     while(playerIsAlive && endNotMet){
         startTime = System.currentTimeMillis();
-        if(progress > 10000){endNotMet = false;}
+        if(progress > levelLen){endNotMet = false;}
         if(mainP.hp < 0){playerIsAlive = false;}
-        while (startTime - lastCycle > 150){
+        while (startTime - lastCycle > 100){
             levprogress.setWidth((double) (4*winWidth/5)*progress/10000);
             levprogress.setTranslateX(5 + (double)winWidth/5 + levprogress.getWidth()/2);
             if(mainP.angle>0){
@@ -86,11 +83,13 @@ Thread gameCycle = new Thread(() -> {
             lastCycle = System.currentTimeMillis();
         }
     }
+    if(!endNotMet && playerIsAlive && i != 0){
+        Utility.progressLevel(i);
+    }
+    Frames.LevelClear.gameEnd(playerIsAlive, endNotMet, score, i);
 });
         gameCycle.start();
         Timeline guiAnim = new Timeline(new KeyFrame(Duration.millis(50), event -> {
-            System.out.println(playerBody.getX());
-
             if(playerBody.getX()<winWidth && playerBody.getX()>0){
                 playerBody.setX(mainP.angle + playerBody.getX());
             } else {
@@ -113,12 +112,17 @@ Thread gameCycle = new Thread(() -> {
                 mainP.angle--;}
             if ((keyEvent.getCode() == KeyCode.D || keyEvent.getCode() == KeyCode.RIGHT) && mainP.angle<30){
                 mainP.angle++;}
+            if (keyEvent.getCode() == KeyCode.END){
+                gameCycle.interrupt();
+                Frames.LevelClear.gameEnd(true, false, score, i);
+            }
         }));
 
     }
 
 
-
+    //Special mode. Yes, its copy-paste of what is above.
+    // Still easier than sorting everything in different methods
     public static void startSpecialGame() {
         Group playfieldLayout = new Group();
         Scene sceneGAME = new Scene(playfieldLayout,winWidth,winHeight);
@@ -237,7 +241,6 @@ Thread gameCycle = new Thread(() -> {
                 }
 
             }
-
             playerBody.setImage(mainP.takeAngle().getImage());
         }));
 

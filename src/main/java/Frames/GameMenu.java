@@ -1,14 +1,18 @@
-package org.example;
+package Frames;
 
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Font;
+import org.example.Utility;
 
 import java.util.Objects;
 
-import static org.example.App.*;
+import static Frames.App.*;
 
+
+//In fact, this class contains only links to resoureces and basic Group construction.
+//Use it, when need to reset GameMenu.menu Group, and then, add whatever you want
 public class GameMenu {
     static int picOfChoice = (int) (Math.random() * 6);
     public static Font font = Font.loadFont(Objects.requireNonNull(GameMenu.class.getResource("/utility/pixRectv2.ttf")).toExternalForm(), 48);

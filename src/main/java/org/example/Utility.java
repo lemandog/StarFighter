@@ -1,5 +1,7 @@
 package org.example;
 
+import Frames.GameMenu;
+import Frames.MenuSelectorLevel;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -70,7 +72,8 @@ public class Utility {
         try {
             Scanner scanner = new Scanner(new File("src/main/resources/save.txt"));
             MenuSelectorLevel.status.setText("Save file found");
-            return scanner.nextInt();
+            if (scanner.hasNext()){return scanner.nextInt();}
+            else {throw new FileNotFoundException();}
         } catch (FileNotFoundException e) {
             MenuSelectorLevel.status.setText("New save created");
             try {
@@ -84,21 +87,19 @@ public class Utility {
         }
         return 1;
     }
-    public static void progressLevel(){
+    public static void progressLevel(int i){
         try {
             Scanner scanner = new Scanner(new File("src/main/resources/save.txt"));
             System.out.println("Save file found and read");
             PrintWriter out = new PrintWriter("src/main/resources/save.txt");
-            out.print(scanner.nextInt()-1);
+            if(scanner.nextInt()>(6-i)){
+                out.print(6-i);
+            }
         } catch (FileNotFoundException e) {
             System.out.println("No save file found. Creating new...");
             getAvailableLevels();
         }
 
-    }
-
-
-    public static void generateRandEnemyList() {
     }
 
     public static void sleepTime(long longMils) {
@@ -110,5 +111,21 @@ public class Utility {
     }
     public static String getImageRes(String path) {
        return Objects.requireNonNull(Utility.class.getResource(path)).toExternalForm();
+    }
+
+    public static int loadLevel(int i) {
+        int result = 0;
+        try {
+            Scanner scanner = new Scanner(new File("src/main/resources/levelInfo/misc.txt"));
+            if(scanner.hasNextLine()){
+                for(int x = 0;x<=i; x++){ //To needed level
+                result =  scanner.nextInt();
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("NO SUCH FILE FOUND! ");
+        }
+        System.out.println("Save file found for length " + result + " LEVEL "+ i);
+        return result;
     }
 }

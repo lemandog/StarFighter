@@ -1,10 +1,11 @@
-package org.example;
+package Frames;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import org.example.Utility;
 
-import static org.example.App.winHeight;
-import static org.example.App.winWidth;
+import static Frames.App.winHeight;
+import static Frames.App.winWidth;
 
 public class MenuSelector {
     static Color hover = Utility.getColorFromPallete(22);

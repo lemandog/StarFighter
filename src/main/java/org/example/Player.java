@@ -1,8 +1,8 @@
 package org.example;
 
+import Frames.App;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import org.example.App;
 
 public class Player {
     public ImageView pic;

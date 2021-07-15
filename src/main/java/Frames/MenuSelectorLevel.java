@@ -1,10 +1,11 @@
-package org.example;
+package Frames;
 
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import static org.example.MenuSelector.*;
-import static org.example.App.winHeight;
-import static org.example.App.winWidth;
+import org.example.Utility;
+
+import static Frames.MenuSelector.*;
+import static Frames.App.winHeight;
+import static Frames.App.winWidth;
 
 public class MenuSelectorLevel {
     public static Text gamemode = new Text("Campain / Arcade");
@@ -21,8 +22,6 @@ public class MenuSelectorLevel {
     static buttonFunc selButton = buttonFunc.FREEMODE;
 
     public static void startup(){
-
-
         int offset = 200;
         int increment = 40;
 

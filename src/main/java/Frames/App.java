@@ -1,4 +1,4 @@
-package org.example;
+package Frames;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.example.Utility;
 
 public class App extends Application {
     public static Scene sceneMM;
