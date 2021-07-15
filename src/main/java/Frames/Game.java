@@ -86,7 +86,7 @@ Thread gameCycle = new Thread(() -> {
     if(!endNotMet && playerIsAlive && i != 0){
         Utility.progressLevel(i);
     }
-    Frames.LevelClear.gameEnd(playerIsAlive, endNotMet, score, i);
+    MenuLevelClear.gameEnd(playerIsAlive, endNotMet, score, i);
 });
         gameCycle.start();
         Timeline guiAnim = new Timeline(new KeyFrame(Duration.millis(50), event -> {
@@ -114,7 +114,7 @@ Thread gameCycle = new Thread(() -> {
                 mainP.angle++;}
             if (keyEvent.getCode() == KeyCode.END){
                 gameCycle.interrupt();
-                Frames.LevelClear.gameEnd(true, false, score, i);
+                MenuLevelClear.gameEnd(true, false, score, i);
             }
         }));
 

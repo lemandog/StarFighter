@@ -9,7 +9,7 @@ import org.example.Utility;
 
 import static Frames.App.winHeight;
 import static Frames.App.winWidth;
-public class LevelClear{
+public class MenuLevelClear {
     static Color sel = Utility.getColorFromPallete(19);
     static Color hover = Utility.getColorFromPallete(22);
 
@@ -36,7 +36,7 @@ public class LevelClear{
             if (keyEvent.getCode() == KeyCode.SPACE || keyEvent.getCode() == KeyCode.ENTER) {
                 buttonFunc.func();
             }
-            LevelClear.checkText();
+            MenuLevelClear.checkText();
         }));
 
         GameEnd.setFill(Color.BLACK);
@@ -103,25 +103,25 @@ public class LevelClear{
         public static void prev() {
             int current = selButton.ordinal();
             if(current > 0){
-                selButton = LevelClear.buttonFunc.values()[current-1];
+                selButton = MenuLevelClear.buttonFunc.values()[current-1];
             }
             else{
-                selButton = LevelClear.buttonFunc.values()[values().length-1];
+                selButton = MenuLevelClear.buttonFunc.values()[values().length-1];
             }
         }
 
         public static void next() {
             int current = selButton.ordinal();
             if(current < values().length-1){
-                selButton = LevelClear.buttonFunc.values()[current+1];
+                selButton = MenuLevelClear.buttonFunc.values()[current+1];
             }
             else{
-                selButton = LevelClear.buttonFunc.START;
+                selButton = MenuLevelClear.buttonFunc.START;
             }
         }
 
         public static void func() {
-            switch (LevelClear.selButton) {
+            switch (MenuLevelClear.selButton) {
                 case EXIT: {
                     System.exit(0);
                     break;
