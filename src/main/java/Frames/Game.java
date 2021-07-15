@@ -112,9 +112,13 @@ Thread gameCycle = new Thread(() -> {
                 mainP.angle--;}
             if ((keyEvent.getCode() == KeyCode.D || keyEvent.getCode() == KeyCode.RIGHT) && mainP.angle<30){
                 mainP.angle++;}
-            if (keyEvent.getCode() == KeyCode.END){
+            if (keyEvent.getCode() == KeyCode.PAGE_UP){
                 gameCycle.interrupt();
                 MenuLevelClear.gameEnd(true, false, score, i);
+            }
+            if (keyEvent.getCode() == KeyCode.PAGE_DOWN){
+                gameCycle.interrupt();
+                MenuLevelClear.gameEnd(false, true, score, i);
             }
         }));
 
@@ -220,7 +224,7 @@ Thread gameCycle = new Thread(() -> {
                     if(checkWall.get()){progress=0;playerBody.setX((double) winWidth/2); checkWall.set(false);}
                     levprogress.setWidth((double) (4*winWidth/5)*progress/dist);
                     levprogress.setTranslateX(5 + (double)winWidth/5 + levprogress.getWidth()/2);
-                    hpT3.setText(String.valueOf((dist - progress) + " km"));
+                    hpT3.setText((dist - progress) + " km");
                     if(mainP.angle>0){
                         mainP.angle--;}
                     if(mainP.angle<0){
@@ -256,21 +260,5 @@ Thread gameCycle = new Thread(() -> {
         }));
     }
 
-    public static void selectMode() {
-        Scene sceneLS = new Scene(GameMenu.construct(),winWidth,winHeight);
-        App.getStage().setScene(sceneLS);
-        MenuSelectorLevel.startup();
-        sceneLS.setOnKeyPressed((keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.S){
-                MenuSelectorLevel.buttonFunc.next();
-            }
-            if (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.W){
-                MenuSelectorLevel.buttonFunc.prev();
-            }
-            if (keyEvent.getCode() == KeyCode.SPACE || keyEvent.getCode() == KeyCode.ENTER){
-                MenuSelectorLevel.buttonFunc.func();
-            }
-            MenuSelector.checkText();
-        }));
-    }
+
 }

@@ -53,32 +53,25 @@ public class MenuSelector {
     }
 
     public static void checkText() {
+        start.setFill(hover);
+        info.setFill(hover);
+        exit.setFill(hover);
+        special.setFill(hidden);
+
         switch (selButton){
             case START:{
                 start.setFill(sel);
-                info.setFill(hover);
-                exit.setFill(hover);
-                special.setFill(hidden);
                 break;
             }
             case INFO:{
-                start.setFill(hover);
                 info.setFill(sel);
-                exit.setFill(hover);
-                special.setFill(hidden);
                 break;
             }
             case EXIT:{
-                start.setFill(hover);
-                info.setFill(hover);
                 exit.setFill(sel);
-                special.setFill(hidden);
                 break;
             }
             case SPECIAL:{
-                start.setFill(hover);
-                info.setFill(hover);
-                exit.setFill(hover);
                 special.setFill(sel);
                 break;
             }
@@ -118,7 +111,7 @@ public class MenuSelector {
                 case INFO:{
                     Utility.constructInfoFrame(); break;}
                 case START:{
-                    Game.selectMode(); break;}
+                    MenuSelectorLevel.selectMode(); break;}
                 case SPECIAL:{
                     Game.startSpecialGame(); break;}
             }

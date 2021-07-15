@@ -2,6 +2,7 @@ package Frames;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -40,38 +41,41 @@ public class MenuLevelClear {
         }));
 
         GameEnd.setFill(Color.BLACK);
-
+        ImageView backg;
         Text gameover = new Text();
         gameover.setFill(sel);
         gameover.setFont(GameMenu.font);
 
         gameover.setX((double) winWidth / 4);
-        gameover.setY((double) winHeight / 4);
+        gameover.setY((double) winHeight / 8);
 
         if (playerIsAlive && !endNotMet) {
             gameover.setText("Level clear!");
+            backg = new ImageView(Utility.getImageRes("/menu/End1.png"));
             outcome = true;
         } else {
             gameover.setText("Mission failed!");
+            backg = new ImageView(Utility.getImageRes("/menu/End2.png"));
             outcome = false;
         }
+        gameoverLayout.getChildren().add(backg);
         gameoverLayout.getChildren().add(gameover);
 
         Text scoreT = new Text(String.format("%06d", score));
         scoreT.setX((double) winWidth / 3);
-        scoreT.setY((double) winHeight / 3 + 50);
+        scoreT.setY((double) winHeight / 8 + 50);
         scoreT.setFill(sel);
         scoreT.setFont(GameMenu.font);
         gameoverLayout.getChildren().add(scoreT);
 
-        start.setX(0);
-        start.setY((double) 2 * winHeight / 3);
+        start.setX(20);
+        start.setY((double) 2 * winHeight / 3 + 60);
         start.setText("To level selector");
         start.setFont(GameMenu.font);
         gameoverLayout.getChildren().add(start);
 
-        exit.setX((double) 3 * winWidth / 4);
-        exit.setY((double) 2 * winHeight / 3);
+        exit.setX((double) 3 * winWidth / 4 + 20);
+        exit.setY((double) 2 * winHeight / 3 + 60);
         exit.setText("Exit");
         exit.setFont(GameMenu.font);
         gameoverLayout.getChildren().add(exit);
@@ -83,14 +87,14 @@ public class MenuLevelClear {
     }
 
     public static void checkText() {
+        exit.setFill(hover);
+        start.setFill(hover);
         switch (selButton) {
             case START: {
                 start.setFill(sel);
-                exit.setFill(hover);
                 break;
             }
             case EXIT: {
-                start.setFill(hover);
                 exit.setFill(sel);
                 break;
             }
@@ -127,9 +131,9 @@ public class MenuLevelClear {
                     break;
                 }
                 case START: {
-                    if (outcome) {
-                        Game.selectMode();
-                    }
+                    if (outcome) {Utility.progressLevel(sLevel);}
+                    MenuSelectorLevel.offsetLevel = Utility.getAvailableLevels();
+                    MenuSelectorLevel.selectMode();
                     break;
                 }
             }

@@ -1,5 +1,7 @@
 package Frames;
 
+import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 import org.example.Utility;
 
@@ -87,49 +89,59 @@ public class MenuSelectorLevel {
 
         checkText();
     }
+    public static void selectMode() {
+        Scene sceneLS = new Scene(GameMenu.construct(),winWidth,winHeight);
+        App.getStage().setScene(sceneLS);
+        MenuSelectorLevel.startup();
+        sceneLS.setOnKeyPressed((keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.S){
+                MenuSelectorLevel.buttonFunc.next();
+            }
+            if (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.W){
+                MenuSelectorLevel.buttonFunc.prev();
+            }
+            if (keyEvent.getCode() == KeyCode.SPACE || keyEvent.getCode() == KeyCode.ENTER){
+                MenuSelectorLevel.buttonFunc.func();
+            }
+            MenuSelector.checkText();
+        }));
+    }
 
     public static void checkText() {
+        lvl1.setFill(hover);
+        lvl2.setFill(hover);
+        lvl3.setFill(hover);
+        lvl4.setFill(hover);
+        lvl5.setFill(hover);
+        lvl6.setFill(hover);
+        freemode.setFill(hover);
         switch (selButton){
             case FREEMODE:{
                 freemode.setFill(sel);
-                lvl1.setFill(hover);
-                lvl6.setFill(hover);
                 break;
             }
             case LVL1:{
-                freemode.setFill(hover);
                 lvl1.setFill(sel);
-                lvl2.setFill(hover);
                 break;
             }
             case LVL2:{
-                lvl1.setFill(hover);
                 lvl2.setFill(sel);
-                lvl3.setFill(hover);
                 break;
             }
             case LVL3:{
-                lvl2.setFill(hover);
                 lvl3.setFill(sel);
-                lvl4.setFill(hover);
                 break;
             }
             case LVL4:{
-                lvl3.setFill(hover);
                 lvl4.setFill(sel);
-                lvl5.setFill(hover);
                 break;
             }
             case LVL5:{
-                lvl4.setFill(hover);
                 lvl5.setFill(sel);
-                lvl6.setFill(hover);
                 break;
             }
             case LVL6:{
-                lvl5.setFill(hover);
                 lvl6.setFill(sel);
-                freemode.setFill(hover);
                 break;
             }
         }

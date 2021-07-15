@@ -90,25 +90,28 @@ public class Utility {
     public static void progressLevel(int i){
         try {
             Scanner scanner = new Scanner(new File("src/main/resources/save.txt"));
-            System.out.println("Save file found and read");
-            PrintWriter out = new PrintWriter("src/main/resources/save.txt");
-            if(scanner.nextInt()>(6-i)){
-                out.print(6-i);
+            if (scanner.hasNext()){
+                int number = scanner.nextInt();
+                if(number > (6-i) && number > 0){
+                    System.out.println("Save file found and read");
+                    PrintWriter out = new PrintWriter("src/main/resources/save.txt");
+                    out.print(6-i);
+                    out.close();
+                }
+                scanner.close();
             }
+            else {
+                throw new FileNotFoundException();
+            }
+
+
         } catch (FileNotFoundException e) {
-            System.out.println("No save file found. Creating new...");
+            System.out.println("Problem with save file. Creating new...");
             getAvailableLevels();
         }
 
     }
 
-    public static void sleepTime(long longMils) {
-        try {
-            Thread.sleep(longMils);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
     public static String getImageRes(String path) {
        return Objects.requireNonNull(Utility.class.getResource(path)).toExternalForm();
     }
