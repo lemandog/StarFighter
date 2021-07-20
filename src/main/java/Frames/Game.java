@@ -23,7 +23,10 @@ import static Frames.App.*;
 public class Game {
     static int score = 0;
     public static void startGame(int i) {
-        int levelLen = Utility.loadLevel(i);
+        Utility.saveSettings(Utility.loadSettings(0),Utility.loadSettings(1),Utility.loadSettings(2), Utility.loadSettings(3)); //From file to programm
+        int levelLen = Utility.loadLevel(i); // Level lenght from file
+        SoundHandler.takeMusicAdress(i);     //Sound handler from file
+
         Queue<Enemy> thisGameList = Enemy.constructEnemyFromFile(i);
 
         Group playfieldLayout = new Group();
@@ -62,6 +65,7 @@ public class Game {
         playfieldLayout.getChildren().add(playerBody);
         playfieldLayout.getChildren().add(hpT);
 
+        SoundHandler.musicInit();
 Thread gameCycle = new Thread(() -> {
     int progress = 0;
     boolean playerIsAlive = true;

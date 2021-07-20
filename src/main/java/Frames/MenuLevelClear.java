@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import org.example.SoundHandler;
 import org.example.Utility;
 
 import static Frames.App.winHeight;
@@ -23,6 +24,10 @@ public class MenuLevelClear {
 
 
     public static void gameEnd(boolean playerIsAlive, boolean endNotMet, int score, int level) {
+        SoundHandler.clip.stop();
+        SoundHandler.clip.close();
+        SoundHandler.music.interrupt();
+
         sLevel = level;
         Group gameoverLayout = new Group();
 
@@ -82,8 +87,6 @@ public class MenuLevelClear {
         checkText();
 
         App.getStage().setScene(GameEnd);
-
-
     }
 
     public static void checkText() {

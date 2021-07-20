@@ -2,12 +2,7 @@ package org.example;
 
 import Frames.App;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
-import java.util.Queue;
-import java.util.Scanner;
+import java.util.*;
 
 public class Enemy {
     long waitTo; //Nanoseconds.
@@ -26,8 +21,8 @@ public class Enemy {
     public static Queue<Enemy> constructEnemyFromFile(int level){
         Queue<Enemy> enemyList =  new LinkedList();
         try {
-            Scanner scanner = new Scanner(new File("src/main/resources/levelInfo/"+ level +".txt"));
-            System.out.println("Save file found " + level);
+            Scanner scanner = new Scanner(Utility.class.getResource("/levelInfo/" + level +".txt").getFile());
+            Utility.debugOutput("Save file found " + level);
             int num = 0;
             scanner.nextLine(); //Skipping info table
             while(scanner.hasNextLine()){
@@ -36,11 +31,11 @@ public class Enemy {
                 long timer = scanner.nextLong();
                 int mod = scanner.nextInt();
                 int speed = scanner.nextInt();
-                System.out.println("LINE "+ num + " CHAR: TYPE " + type +" TIMER " + timer + " MOVE SET " + mod + " SPEED IS " + speed);
+                Utility.debugOutput("LINE "+ num + " CHAR: TYPE " + type +" TIMER " + timer + " MOVE SET " + mod + " SPEED IS " + speed);
                 enemyList.add(new Enemy(type,timer,mod,speed));
             }
-        } catch (FileNotFoundException | NoSuchElementException e) {
-            System.out.println("NO SUCH FILE FOUND OR EMPTY! " + "levelList"+ level +".txt" + " Generating random...");
+        } catch (NullPointerException e) {
+            Utility.debugOutput("NO SUCH FILE FOUND OR EMPTY! " + level +".txt" + " Generating random...");
             return randomList();
         }
     return enemyList;

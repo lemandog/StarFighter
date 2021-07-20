@@ -1,5 +1,6 @@
 package Frames;
 
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.example.Utility;
@@ -16,6 +17,7 @@ public class MenuSelector {
     public static Text start = new Text("Start");
     public static Text info = new Text("Info");
     public static Text exit = new Text("Exit");
+    public static Text settings = new Text("Settings");
     public static Text special = new Text("SpecialMode");
 
     static buttonFunc selButton = buttonFunc.START;
@@ -28,13 +30,17 @@ public class MenuSelector {
         MenuSelector.start.setLayoutY((float)winHeight/5 + offset);
         GameMenu.menu.getChildren().add(MenuSelector.start);
 
-
         MenuSelector.info.setFont(GameMenu.font);
         MenuSelector.info.setLayoutX((float)winWidth/5);
         offset += increment;
         MenuSelector.info.setLayoutY((float)winHeight/5 + offset);
         GameMenu.menu.getChildren().add(MenuSelector.info);
 
+        MenuSelector.settings.setFont(GameMenu.font);
+        MenuSelector.settings.setLayoutX((float)winWidth/5);
+        offset += increment;
+        MenuSelector.settings.setLayoutY((float)winHeight/5 + offset);
+        GameMenu.menu.getChildren().add(MenuSelector.settings);
 
         MenuSelector.exit.setFont(GameMenu.font);
         MenuSelector.exit.setLayoutX((float)winWidth/5);
@@ -42,12 +48,28 @@ public class MenuSelector {
         MenuSelector.exit.setLayoutY((float)winHeight/5 + offset);
         GameMenu.menu.getChildren().add(MenuSelector.exit);
 
-
         MenuSelector.special.setFont(GameMenu.font);
         MenuSelector.special.setLayoutX((float)winWidth/5);
         offset += increment;
         MenuSelector.special.setLayoutY((float)winHeight/5 + offset);
         GameMenu.menu.getChildren().add(MenuSelector.special);
+
+        App.sceneMM.setOnKeyPressed((keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.S) {
+                MenuSelector.buttonFunc.next();
+            }
+            if (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.W) {
+                MenuSelector.buttonFunc.prev();
+            }
+            if (keyEvent.getCode() == KeyCode.SPACE || keyEvent.getCode() == KeyCode.ENTER) {
+                MenuSelector.buttonFunc.func();
+            }
+            if (keyEvent.getCode() == KeyCode.F1) {
+                MenuSelector.buttonFunc.special();
+            }
+            MenuSelector.checkText();
+        }));
+
 
         MenuSelector.checkText();
     }
@@ -56,6 +78,7 @@ public class MenuSelector {
         start.setFill(hover);
         info.setFill(hover);
         exit.setFill(hover);
+        settings.setFill(hover);
         special.setFill(hidden);
 
         switch (selButton){
@@ -71,6 +94,10 @@ public class MenuSelector {
                 exit.setFill(sel);
                 break;
             }
+            case SETTINGS:{
+                settings.setFill(sel);
+                break;
+            }
             case SPECIAL:{
                 special.setFill(sel);
                 break;
@@ -81,6 +108,7 @@ public class MenuSelector {
     public enum buttonFunc{
         START,
         INFO,
+        SETTINGS,
         EXIT,
         SPECIAL;
 
@@ -90,7 +118,7 @@ public class MenuSelector {
                 selButton = buttonFunc.values()[current-1];
             }
             else{
-                selButton = buttonFunc.EXIT;
+                selButton = buttonFunc.values()[values().length-2];
             }
         }
 
@@ -100,7 +128,7 @@ public class MenuSelector {
                 selButton = buttonFunc.values()[current+1];
             }
             else{
-                selButton = buttonFunc.START;
+                selButton = buttonFunc.values()[0];
             }
         }
 
@@ -114,6 +142,8 @@ public class MenuSelector {
                     MenuSelectorLevel.selectMode(); break;}
                 case SPECIAL:{
                     Game.startSpecialGame(); break;}
+                case SETTINGS:{
+                    MenuSettings.selectMode(); break;}
             }
         }
         public static void special() {

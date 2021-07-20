@@ -13,6 +13,7 @@ public class MenuSelectorLevel {
     public static Text gamemode = new Text("Campain / Arcade");
     public static Text status = new Text("Reading file");
     public static Text freemode = new Text("Free fight");
+    public static Text tReturn = new Text("To menu");
     public static Text lvl1 = new Text("LVL 1");
     public static Text lvl2 = new Text("LVL 2");
     public static Text lvl3 = new Text("LVL 3");
@@ -44,6 +45,12 @@ public class MenuSelectorLevel {
         freemode.setLayoutY((float)winHeight/5 + offset + increment);
         freemode.setFill(hover);
         GameMenu.menu.getChildren().add(freemode);
+
+        tReturn.setFont(GameMenu.font);
+        tReturn.setLayoutX((float)winWidth/5  + offset);
+        tReturn.setLayoutY((float)winHeight/5 + offset + increment*2);
+        tReturn.setFill(hover);
+        GameMenu.menu.getChildren().add(tReturn);
 
         lvl1.setFont(GameMenu.font);
         lvl1.setLayoutX((float)winWidth/5);
@@ -114,8 +121,13 @@ public class MenuSelectorLevel {
         lvl4.setFill(hover);
         lvl5.setFill(hover);
         lvl6.setFill(hover);
+        tReturn.setFill(hover);
         freemode.setFill(hover);
         switch (selButton){
+            case RETURN:{
+                tReturn.setFill(sel);
+                break;
+            }
             case FREEMODE:{
                 freemode.setFill(sel);
                 break;
@@ -148,6 +160,7 @@ public class MenuSelectorLevel {
     }
 
     public enum buttonFunc{
+        RETURN,
         FREEMODE,
         LVL1,
         LVL2,
@@ -173,13 +186,18 @@ public class MenuSelectorLevel {
                 selButton = buttonFunc.values()[current+1];
             }
             else{
-                selButton = buttonFunc.FREEMODE;
+                selButton = buttonFunc.values()[0];
             }
             checkText();
         }
 
         public static void func() {
             switch (selButton){
+                case RETURN:{
+                    App.sceneMM = new Scene(GameMenu.construct());
+                    MenuSelector.startup();
+                    App.getStage().setScene(App.sceneMM);
+                    break;}
                 case FREEMODE:{Game.startGame(0); break;}
                 case LVL1:{Game.startGame(1); break;}
                 case LVL2:{Game.startGame(2); break;}
