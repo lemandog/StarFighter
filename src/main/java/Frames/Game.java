@@ -15,19 +15,20 @@ import javafx.util.Duration;
 import org.example.*;
 
 
-import java.util.Queue;
+import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static Frames.App.*;
 
 public class Game {
     static int score = 0;
+    static LinkedList<Enemy> thisGameList;
     public static void startGame(int i) {
         Utility.saveSettings(Utility.loadSettings(0),Utility.loadSettings(1),Utility.loadSettings(2), Utility.loadSettings(3)); //From file to programm
         int levelLen = Utility.loadLevel(i); // Level lenght from file
         SoundHandler.takeMusicAdress(i);     //Sound handler from file
 
-        Queue<Enemy> thisGameList = Enemy.constructEnemyFromFile(i);
+        thisGameList = Enemy.constructEnemyFromFile(i);
 
         Group playfieldLayout = new Group();
         Scene sceneGAME = new Scene(playfieldLayout,winWidth,winHeight);
@@ -39,6 +40,7 @@ public class Game {
         ImageView gui = new ImageView(Utility.getImageRes("/menu/GUI2.png"));
         ImageView backgr = new ImageView(Utility.getImageRes("/levelbackgr/lvl"+ i +".png"));
 
+
         Box levprogress = new Box();
         levprogress.setHeight(30);
         levprogress.setWidth(1);
@@ -49,6 +51,9 @@ public class Game {
         levprogress.setMaterial(boxCol);
 
         playfieldLayout.getChildren().add(backgr);
+        for (Enemy enemy : thisGameList) {
+            playfieldLayout.getChildren().add(enemy.pic);
+        }
         playfieldLayout.getChildren().add(gui);
         playfieldLayout.getChildren().add(levprogress);
 
@@ -65,6 +70,8 @@ public class Game {
         playfieldLayout.getChildren().add(playerBody);
         playfieldLayout.getChildren().add(hpT);
 
+
+
         SoundHandler.musicInit();
 Thread gameCycle = new Thread(() -> {
     int progress = 0;
@@ -73,6 +80,7 @@ Thread gameCycle = new Thread(() -> {
     long startTime = System.currentTimeMillis();
     long lastCycle = startTime;
     while(playerIsAlive && endNotMet){
+        activateEnemyCycle();
         startTime = System.currentTimeMillis();
         if(progress > levelLen){endNotMet = false;}
         if(mainP.hp < 0){playerIsAlive = false;}
@@ -90,6 +98,7 @@ Thread gameCycle = new Thread(() -> {
     if(!endNotMet && playerIsAlive && i != 0){
         Utility.progressLevel(i);
     }
+    thisGameList.clear();
     MenuLevelClear.gameEnd(playerIsAlive, endNotMet, score, i);
 });
         gameCycle.start();
@@ -126,6 +135,19 @@ Thread gameCycle = new Thread(() -> {
             }
         }));
 
+    }
+
+    static void activateEnemyCycle(){
+        for(int i = 0; i< thisGameList.size(); i++){
+            try {
+                Thread.sleep(thisGameList.element().waitTo);
+                thisGameList.element().animationStart();
+                thisGameList.remove();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
 

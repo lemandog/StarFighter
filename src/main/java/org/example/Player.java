@@ -9,6 +9,7 @@ public class Player {
     double[] Coordinates;
     public int hp;
     public int angle;
+    public static int score = 0;
         public Player(int level){
             Coordinates = new double[] {App.winHeight - 100,(double) App.winWidth/2};
             hp = 200  + 40*level;
@@ -16,8 +17,8 @@ public class Player {
             pic = takeAngle();
             pic.setY(Coordinates[0]);
             pic.setX(Coordinates[1]);
-
         }
+
         public ImageView takeAngle(){
             Image resPic;
             String tarRes = String.format("%04d", Math.abs(angle));
