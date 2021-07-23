@@ -173,7 +173,7 @@ public class Utility {
 
 
     public static int loadLevel(int i) {
-            int result = 0;
+        int result = 0;
         Scanner scanner = null;
         try {
             scanner = new Scanner(new File(documentsPath + File.separator +"misc.txt"));
@@ -187,7 +187,7 @@ public class Utility {
             debugOutput("MISC FILE GENERATED! "+ i);
             loadSettings(i);
         }
-            debugOutput("Save file found for length " + result + " LEVEL "+ i);
+            debugOutput("Save file found LEVEL_LENGTH " + result + " NO "+ i);
             return result;
     }
 

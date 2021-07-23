@@ -70,8 +70,6 @@ public class Game {
         playfieldLayout.getChildren().add(playerBody);
         playfieldLayout.getChildren().add(hpT);
 
-
-
         SoundHandler.musicInit();
 Thread gameCycle = new Thread(() -> {
     int progress = 0;
@@ -79,13 +77,13 @@ Thread gameCycle = new Thread(() -> {
     boolean endNotMet = true;
     long startTime = System.currentTimeMillis();
     long lastCycle = startTime;
+    activateEnemyCycle();
     while(playerIsAlive && endNotMet){
-        activateEnemyCycle();
-        startTime = System.currentTimeMillis();
         if(progress > levelLen){endNotMet = false;}
         if(mainP.hp < 0){playerIsAlive = false;}
+        startTime = System.currentTimeMillis();
         while (startTime - lastCycle > 100){
-            levprogress.setWidth((double) (4*winWidth/5)*progress/10000);
+            levprogress.setWidth((double) (4*winWidth/5)*progress/levelLen);
             levprogress.setTranslateX(5 + (double)winWidth/5 + levprogress.getWidth()/2);
             if(mainP.angle>0){
                 mainP.angle--;}
@@ -95,6 +93,7 @@ Thread gameCycle = new Thread(() -> {
             lastCycle = System.currentTimeMillis();
         }
     }
+    Utility.debugOutput("GAME CYCLE OVER");
     if(!endNotMet && playerIsAlive && i != 0){
         Utility.progressLevel(i);
     }
@@ -138,6 +137,7 @@ Thread gameCycle = new Thread(() -> {
     }
 
     static void activateEnemyCycle(){
+        new Thread(() -> {
         for(int i = 0; i< thisGameList.size(); i++){
             try {
                 Thread.sleep(thisGameList.element().waitTo);
@@ -147,7 +147,7 @@ Thread gameCycle = new Thread(() -> {
                 e.printStackTrace();
             }
 
-        }
+        }}).start();
     }
 
 

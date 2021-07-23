@@ -8,6 +8,8 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import java.util.*;
 
+import static Frames.App.winWidth;
+
 public class Enemy {
     public long waitTo; //Nanoseconds.
     long startupTime;
@@ -28,7 +30,7 @@ public class Enemy {
     double Vmultiplier;
     double add;
 
-    Enemy(int type, long timer, int mod, int speed, double multiplier, double Vmultipluer, double add){
+    Enemy(int type, long timer, int mod, double speed, double multiplier, double Vmultipluer, double add){
         this.damage = 10*type;
         this.type = type;
         this.speed = speed;
@@ -36,15 +38,11 @@ public class Enemy {
         this.angle = 0;
         this.waitTo = startupTime + timer;
         this.startupTime = System.nanoTime();
-        this.score = type*speed*mod;
+        this.score = (int) (type*speed*mod);
 
         this.multiplier = multiplier;
         this.Vmultiplier = Vmultipluer;
         this.add = add;
-
-        Utility.debugOutput("ENEMY CONSTRUCTED: " + " TYPE " +type + " DAMAGE " + damage +
-                " SPEED " + speed + " WAITING TO " + waitTo+ " M IS " + this.multiplier + " VM "
-                + this.Vmultiplier + " ADD " + this.add);
 
         pic.setImage(getImagePos());
         pic.setVisible(false);
@@ -54,7 +52,7 @@ public class Enemy {
         LinkedList<Enemy> enemyList =  new <Enemy>LinkedList();
         try {
             Scanner scanner = new Scanner(Objects.requireNonNull(Utility.class.getResource("/levelInfo/" + level + ".txt")).getFile());
-            Utility.debugOutput("Save file found " + level);
+            Utility.debugOutput("Save file found ENEMYLIST " + level);
             int num = 0;
             scanner.nextLine(); //Skipping info table
             while(scanner.hasNextLine()){
@@ -66,7 +64,6 @@ public class Enemy {
                 double multiplier = scanner.nextDouble();
                 double Vmultiplier = scanner.nextDouble();
                 double add = scanner.nextDouble();
-                Utility.debugOutput("LINE "+ num + " CHAR: TYPE " + type +" TIMER " + timer + " MOVE SET " + mod + " SPEED IS " + speed);
                 enemyList.add(new Enemy(type,timer,mod,speed,multiplier,Vmultiplier,add));
             }
         } catch (NullPointerException e) {
@@ -77,22 +74,37 @@ public class Enemy {
     }
 
     public void animationStart(){
-        ememyMovement = new Timeline(new KeyFrame(Duration.millis(50),event -> {
+        ememyMovement = new Timeline(new KeyFrame(Duration.millis(40),event -> {
+            int screenMultiplier = 0; // amount of times enemy traveled off screen, because if u just reset coordinate, moveSet will calculate wrong path
             pic.setVisible(true);
             if(this.alive && this.onScreen){
                 coordinates[1] += speed;
                 coordinates[0] = moveSet(mod,coordinates[1]);
-                if(((int) pic.getX() - (int) coordinates[0])>0){
-                    angle = (int) speed;
+
+                if(coordinates[0]>=winWidth){
+                    screenMultiplier--;
+                } //Appear on the other side
+                if(coordinates[0]<=0){
+                    screenMultiplier++;
+                }
+
+                int diff = (int) pic.getX() - (int) coordinates[0];
+
+                if(diff>0){ //Calculate needed pic
+                    while (diff>30){diff -= 1;}
+                    angle = diff;
                 }
                 else {
-                    angle = (int) -speed;
+                    while (diff<-30){diff += 1;}
+                    angle = diff;
                 }
+
                 pic.setImage(getImagePos());
-                pic.setX(coordinates[0]);
+                pic.setX(coordinates[0] + (winWidth*screenMultiplier));
                 pic.setY(coordinates[1]);
+
                 //New coordinates
-                if(pic.getX()> App.winWidth || pic.getY()> App.winHeight || pic.getY()<0 || pic.getX()<0){
+                if(pic.getY()> App.winHeight || pic.getY()<0){
                     this.onScreen = false;
                 }
             } else {
@@ -109,12 +121,11 @@ public class Enemy {
 
     private Image getImagePos(){
         String tarRes;
-        if(angle<0){
-            tarRes = String.format("%04d", Math.abs(angle + 30));
+        if(angle<=0){
+            tarRes = String.format("%04d", 30 + Math.abs(angle));
         } else {
-            tarRes = String.format("%04d", Math.abs(angle));
+            tarRes = String.format("%04d", (30 - angle));
         }
-        Utility.debugOutput("GET IMAGE POSITION /enemy/"+ this.type +"/" + tarRes +".png");
         return new Image(Utility.getImageRes("/enemy/"+ this.type +"/" + tarRes +".png"),80,80,false,false);
     }
 
@@ -124,9 +135,9 @@ public class Enemy {
             case 2: { return add + multiplier*Math.cos(Vmultiplier*yCord);}
             case 3: { return add + -multiplier*Math.sin(Vmultiplier*yCord);}
             case 4: { return add + -multiplier*Math.cos(Vmultiplier*yCord);}
-            case 5: { return add + multiplier*Math.exp(Vmultiplier*yCord);}
-            case 6: { return add + -multiplier*Math.exp(Vmultiplier*yCord);}
-            case 7: { return add + multiplier*Math.atan(Vmultiplier*yCord);}
+            case 5: { return add + multiplier*Math.cos(Math.acos(Vmultiplier*yCord));}
+            case 6: { return add + -multiplier*Math.sin(Math.pow(Vmultiplier*yCord,1.2));}
+            case 7: { return add + multiplier*Math.sin(Math.atan(Vmultiplier*yCord));}
             default: { return add;}
         }
     }
@@ -135,11 +146,11 @@ public class Enemy {
         LinkedList<Enemy> enemyList = new <Enemy>LinkedList();
         for (int i = 0; i < 4000; i++) {
             int type = (int) (1 + Math.random()*4);
-            long timer = (int) (Math.random()*1000);
+            long timer = (int) (Math.random()*4000);
             int mod = (int) (Math.random()*7);
-            int speed = (int) (1 + Math.random()*5);
-            double multiplier = Math.random()*100;
-            double Vmultiplier = Math.random() * 0.05 * 10;
+            double speed = (0.35 + Math.random()*3);
+            double multiplier = Math.random()*150;
+            double Vmultiplier = Math.random() * 0.005 * 10;
             double add = (0.5 - Math.random())*200 + (double) App.winWidth/2 - 40;
             enemyList.add(new Enemy(type,timer,mod,speed,multiplier,Vmultiplier,add));
         }
