@@ -9,6 +9,7 @@ import javafx.util.Duration;
 import java.util.*;
 
 import static Frames.App.winWidth;
+import static Frames.Game.mainP;
 
 public class Enemy {
     public long waitTo; //Nanoseconds.
@@ -19,9 +20,10 @@ public class Enemy {
     int angle;
     public boolean alive = true;
     boolean onScreen = true;
+    boolean alreadyHit = false;
     int score;
     int damage;
-    int collideDamage = 50;
+    int collideDamage = 20;
     public ImageView pic = new ImageView();
     public Timeline ememyMovement;
     double[] coordinates = new double[] {(double) App.winWidth/2,40};
@@ -31,7 +33,7 @@ public class Enemy {
     double add;
 
     Enemy(int type, long timer, int mod, double speed, double multiplier, double Vmultipluer, double add){
-        this.damage = 10*type;
+        this.damage = 5*type;
         this.type = type;
         this.speed = speed;
         this.mod = mod;
@@ -111,9 +113,11 @@ public class Enemy {
                 pic.setVisible(false);
                 if(!this.alive){
                     Player.score += this.score;
+                }ememyMovement.stop();}
+                if(this.pic.intersects(mainP.pic.getBoundsInLocal()) && !alreadyHit){
+                    alreadyHit = true;
+                    mainP.giveDamage(this.collideDamage);
                 }
-                ememyMovement.stop();
-            }
         }));
         ememyMovement.setCycleCount(Timeline.INDEFINITE);
         ememyMovement.play();

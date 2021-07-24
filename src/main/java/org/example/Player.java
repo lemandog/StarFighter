@@ -31,4 +31,8 @@ public class Player {
             res.setImage(resPic);
             return res;
         }
+
+    public void giveDamage(int damage) {
+            this.hp -= damage;
+    }
 }

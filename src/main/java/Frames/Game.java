@@ -2,6 +2,7 @@ package Frames;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.*;
@@ -22,6 +23,7 @@ import static Frames.App.*;
 
 public class Game {
     static int score = 0;
+    public static Player mainP;
     static LinkedList<Enemy> thisGameList;
     public static void startGame(int i) {
         Utility.saveSettings(Utility.loadSettings(0),Utility.loadSettings(1),Utility.loadSettings(2), Utility.loadSettings(3)); //From file to programm
@@ -63,7 +65,7 @@ public class Game {
         hpT.setLayoutX(15);
         hpT.setLayoutY(55);
 
-        Player mainP = new Player(i);
+        mainP = new Player(i);
 
         ImageView playerBody = mainP.pic;
 
@@ -98,7 +100,11 @@ Thread gameCycle = new Thread(() -> {
         Utility.progressLevel(i);
     }
     thisGameList.clear();
-    MenuLevelClear.gameEnd(playerIsAlive, endNotMet, score, i);
+
+    boolean finalPlayerIsAlive = playerIsAlive;
+    boolean finalEndNotMet = endNotMet;
+    Platform.runLater(() -> MenuLevelClear.gameEnd(finalPlayerIsAlive, finalEndNotMet, score, i)); // To avoid "Not on FX thread exception
+
 });
         gameCycle.start();
         Timeline guiAnim = new Timeline(new KeyFrame(Duration.millis(50), event -> {
@@ -106,7 +112,7 @@ Thread gameCycle = new Thread(() -> {
                 playerBody.setX(mainP.angle + playerBody.getX());
             } else {
                 if(playerBody.getX()>=winWidth){
-                    playerBody.setX(1);}
+                    playerBody.setX(20);}
                 if(playerBody.getX()<=0){
                     playerBody.setX(winWidth-20);}
             }
@@ -128,7 +134,7 @@ Thread gameCycle = new Thread(() -> {
                 gameCycle.interrupt();
                 MenuLevelClear.gameEnd(true, false, score, i);
             }
-            if (keyEvent.getCode() == KeyCode.PAGE_DOWN){
+            if (keyEvent.getCode() == KeyCode.ESCAPE){
                 gameCycle.interrupt();
                 MenuLevelClear.gameEnd(false, true, score, i);
             }
@@ -143,9 +149,7 @@ Thread gameCycle = new Thread(() -> {
                 Thread.sleep(thisGameList.element().waitTo);
                 thisGameList.element().animationStart();
                 thisGameList.remove();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            } catch (Exception ignore) {}
 
         }}).start();
     }
@@ -226,11 +230,10 @@ Thread gameCycle = new Thread(() -> {
         Thread gameCycle = new Thread(() -> {
             double progress = 0;
             double speed = 1.147e+10;
-            boolean endNotMet = true;
             long startTime = System.currentTimeMillis();
             long lastCycle = startTime;
             double dist = 4.13e+13;
-            while(endNotMet){
+            while(true){
                 startTime = System.currentTimeMillis();
                 if(progress > dist){
                     hpT5.setVisible(true);
