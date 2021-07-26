@@ -167,8 +167,13 @@ public class Utility {
 
     }
 
-    public static String getImageRes(String path) {
-       return Objects.requireNonNull(Utility.class.getResource(path)).toExternalForm();
+    public static String getImageRes(String path){
+        try{
+            return Objects.requireNonNull(Utility.class.getResource(path)).toExternalForm();
+        }catch (NullPointerException e){
+            Utility.debugOutput("NO SUCH FILE!");
+            return null;
+        }
     }
 
 

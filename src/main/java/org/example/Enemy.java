@@ -6,10 +6,14 @@ import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 import static Frames.App.winWidth;
 import static Frames.Game.mainP;
+import static org.example.Utility.documentsPath;
 
 public class Enemy {
     public long waitTo; //Nanoseconds.
@@ -53,12 +57,10 @@ public class Enemy {
     public static LinkedList<Enemy> constructEnemyFromFile(int level){
         LinkedList<Enemy> enemyList =  new <Enemy>LinkedList();
         try {
-            Scanner scanner = new Scanner(Objects.requireNonNull(Utility.class.getResource("/levelInfo/" + level + ".txt")).getFile());
-            Utility.debugOutput("Save file found ENEMYLIST " + level);
-            int num = 0;
+            Scanner scanner = new Scanner(new File(documentsPath + File.separator + "/levelInfo/" + level + ".txt"));
             scanner.nextLine(); //Skipping info table
             while(scanner.hasNextLine()){
-                num++;
+                Utility.debugOutput(String.valueOf(scanner.hasNextLine()));
                 int type = scanner.nextInt();
                 long timer = scanner.nextLong();
                 int mod = scanner.nextInt();
@@ -66,13 +68,14 @@ public class Enemy {
                 double multiplier = scanner.nextDouble();
                 double Vmultiplier = scanner.nextDouble();
                 double add = scanner.nextDouble();
+                Utility.debugOutput("ENEMY GEN "+ type + " " + multiplier);
                 enemyList.add(new Enemy(type,timer,mod,speed,multiplier,Vmultiplier,add));
             }
-        } catch (NullPointerException e) {
-            Utility.debugOutput("NO SUCH FILE FOUND OR EMPTY! " + level +".txt" + " Generating random...");
-            return randomList();
+        } catch (NullPointerException | NoSuchElementException | FileNotFoundException e) {
+            Utility.debugOutput("NO SUCH FILE FOUND OR CORRUPTED/EMPTY! " + level +".txt" + " Generating random..." + e.getMessage());
+            if (e.getMessage() != null){return randomList();}
         }
-    return enemyList;
+        return enemyList;
     }
 
     public void animationStart(){
@@ -90,15 +93,15 @@ public class Enemy {
                     screenMultiplier++;
                 }
 
-                int diff = (int) pic.getX() - (int) coordinates[0];
+                int diff = (int) this.pic.getX() - (int) (this.coordinates[0]+ (winWidth*screenMultiplier)); // Because angle could be wrong if coord outside window
 
                 if(diff>0){ //Calculate needed pic
                     while (diff>30){diff -= 1;}
-                    angle = diff;
+                    this.angle = diff;
                 }
                 else {
                     while (diff<-30){diff += 1;}
-                    angle = diff;
+                    this.angle = diff;
                 }
 
                 pic.setImage(getImagePos());
@@ -155,7 +158,7 @@ public class Enemy {
             double speed = (0.35 + Math.random()*3);
             double multiplier = Math.random()*150;
             double Vmultiplier = Math.random() * 0.005 * 10;
-            double add = (0.5 - Math.random())*200 + (double) App.winWidth/2 - 40;
+            double add = (0.5 - Math.random())*(winWidth*2 - 80) + 80;
             enemyList.add(new Enemy(type,timer,mod,speed,multiplier,Vmultiplier,add));
         }
         return enemyList;

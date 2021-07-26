@@ -17,6 +17,7 @@ import org.example.*;
 
 
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static Frames.App.*;
@@ -39,18 +40,23 @@ public class Game {
         mainStage.setScene(sceneGAME);
         sceneGAME.setFill(Color.BLACK);
 
-        ImageView gui = new ImageView(Utility.getImageRes("/menu/GUI2.png"));
-        ImageView backgr = new ImageView(Utility.getImageRes("/levelbackgr/lvl"+ i +".png"));
+        ImageView gui = new ImageView(Objects.requireNonNull(Utility.getImageRes("/menu/GUI4.png")));
+        ImageView backgr = new ImageView(Objects.requireNonNull(Utility.getImageRes("/levelbackgr/lvl" + i + ".png")));
 
 
-        Box levprogress = new Box();
-        levprogress.setHeight(30);
-        levprogress.setWidth(1);
-        levprogress.setTranslateX(5 + (double)winWidth/5);
+        Text levprogress = new Text();
+        levprogress.setLayoutX(winWidth - 140);
         levprogress.setLayoutY(40);
-        PhongMaterial boxCol = new PhongMaterial();
-        boxCol.setDiffuseColor(Utility.getColorFromPallete(22));
-        levprogress.setMaterial(boxCol);
+        levprogress.setFont(GameMenu.font);
+        levprogress.setFill(Utility.getColorFromPallete(22));
+        levprogress.setStroke(Utility.getColorFromPallete(23));
+
+        Text scoreT = new Text();
+        scoreT.setLayoutX((double) winWidth/3);
+        scoreT.setLayoutY(40);
+        scoreT.setFont(GameMenu.font);
+        scoreT.setFill(Utility.getColorFromPallete(22));
+        scoreT.setStroke(Utility.getColorFromPallete(23));
 
         playfieldLayout.getChildren().add(backgr);
         for (Enemy enemy : thisGameList) {
@@ -58,12 +64,13 @@ public class Game {
         }
         playfieldLayout.getChildren().add(gui);
         playfieldLayout.getChildren().add(levprogress);
+        playfieldLayout.getChildren().add(scoreT);
 
-        Text hpT = new Text("200");
+        Text hpT = new Text();
         hpT.setFont(GameMenu.font);
         hpT.setFill(Utility.getColorFromPallete(7));
         hpT.setLayoutX(15);
-        hpT.setLayoutY(55);
+        hpT.setLayoutY(40);
 
         mainP = new Player(i);
 
@@ -85,12 +92,7 @@ Thread gameCycle = new Thread(() -> {
         if(mainP.hp < 0){playerIsAlive = false;}
         startTime = System.currentTimeMillis();
         while (startTime - lastCycle > 100){
-            levprogress.setWidth((double) (4*winWidth/5)*progress/levelLen);
-            levprogress.setTranslateX(5 + (double)winWidth/5 + levprogress.getWidth()/2);
-            if(mainP.angle>0){
-                mainP.angle--;}
-            if(mainP.angle<0){
-                mainP.angle++;}
+            levprogress.setText(String.format("%3.0f", 100*((double)progress/(double)levelLen)) + "%");
             progress++;
             lastCycle = System.currentTimeMillis();
         }
@@ -107,22 +109,29 @@ Thread gameCycle = new Thread(() -> {
 
 });
         gameCycle.start();
-        Timeline guiAnim = new Timeline(new KeyFrame(Duration.millis(50), event -> {
+        Timeline playerAnim = new Timeline(new KeyFrame(Duration.millis(50), event -> {
+            if(mainP.angle>0){
+                mainP.angle--;}
+            if(mainP.angle<0){
+                mainP.angle++;}
             if(playerBody.getX()<winWidth && playerBody.getX()>0){
                 playerBody.setX(mainP.angle + playerBody.getX());
             } else {
                 if(playerBody.getX()>=winWidth){
-                    playerBody.setX(20);}
+                    playerBody.setX(1);}
                 if(playerBody.getX()<=0){
-                    playerBody.setX(winWidth-20);}
+                    playerBody.setX(winWidth-80);}
             }
-
+        }));
+        Timeline guiAnim = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             playerBody.setImage(mainP.takeAngle().getImage());
+            scoreT.setText(String.format("%06d", score));
             hpT.setText(String.valueOf(mainP.hp));
         }));
-
+        playerAnim.setCycleCount(Timeline.INDEFINITE);
         guiAnim.setCycleCount(Timeline.INDEFINITE);
         guiAnim.play();
+        playerAnim.play();
 
         sceneGAME.setOnKeyPressed((keyEvent -> {
             mainP.takeAngle();
@@ -165,10 +174,10 @@ Thread gameCycle = new Thread(() -> {
         mainStage.setScene(sceneGAME);
         sceneGAME.setFill(Color.BLACK);
 
-        ImageView gui = new ImageView(Utility.getImageRes("/menu/GUI2.png"));
+        ImageView gui = new ImageView(Objects.requireNonNull(Utility.getImageRes("/menu/GUI2.png")));
         gui.setX(0);
         gui.setY(0);
-        ImageView backgr = new ImageView(Utility.getImageRes("/levelbackgr/lvl0.png"));
+        ImageView backgr = new ImageView(Objects.requireNonNull(Utility.getImageRes("/levelbackgr/lvl0.png")));
         backgr.setX(0);
         backgr.setY(0);
 

@@ -25,6 +25,8 @@ public class App extends Application {
         sceneMM.setFill(Color.BLACK);
         guiStage.setTitle("STARFIGHTER");
 
+        guiStage.setOnCloseRequest(windowEvent -> {System.exit(0);});
+
 
 
         Image icon = new Image(Utility.getImageRes("/menu/icon.png"));

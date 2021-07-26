@@ -5,6 +5,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 import org.example.Utility;
 
+import java.awt.*;
+
 import static Frames.MenuSelector.*;
 import static Frames.App.winHeight;
 import static Frames.App.winWidth;
@@ -199,12 +201,12 @@ public class MenuSelectorLevel {
                     App.getStage().setScene(App.sceneMM);
                     break;}
                 case FREEMODE:{Game.startGame(0); break;}
-                case LVL1:{Game.startGame(1); break;}
-                case LVL2:{Game.startGame(2); break;}
-                case LVL3:{Game.startGame(3); break;}
-                case LVL4:{Game.startGame(4); break;}
-                case LVL5:{Game.startGame(5); break;}
-                case LVL6:{Game.startGame(6); break;}
+                case LVL1:{if (MenuSettings.comicShow != 1){Game.startGame(1);} else{ Comic.construct(1);} break;}
+                case LVL2:{if (MenuSettings.comicShow != 1){Game.startGame(2);} else{ Comic.construct(2);} break;}
+                case LVL3:{if (MenuSettings.comicShow != 1){Game.startGame(3);} else{ Comic.construct(3);} break;}
+                case LVL4:{if (MenuSettings.comicShow != 1){Game.startGame(4);} else{ Comic.construct(4);} break;}
+                case LVL5:{if (MenuSettings.comicShow != 1){Game.startGame(5);} else{ Comic.construct(5);} break;}
+                case LVL6:{if (MenuSettings.comicShow != 1){Game.startGame(6);} else{ Comic.construct(6);} break;}
             }
         }
 
