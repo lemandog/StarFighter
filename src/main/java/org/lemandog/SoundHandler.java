@@ -1,6 +1,6 @@
-package org.example;
+package org.lemandog;
 
-import Frames.MenuSettings;
+import org.lemandog.Frames.MenuSettings;
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.net.URL;

@@ -1,8 +1,10 @@
-package org.example;
+package org.lemandog;
 
-import Frames.App;
+import org.lemandog.Frames.App;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import java.util.Objects;
 
 public class Player {
     public ImageView pic;
@@ -23,9 +25,9 @@ public class Player {
             Image resPic;
             String tarRes = String.format("%04d", Math.abs(angle));
             if(angle<0){
-                resPic = new Image(Utility.getImageRes("/rotation/CL/" +tarRes+".png"),80,80,false,false);
+                resPic = new Image(Objects.requireNonNull(Utility.getImageRes("/rotation/CL/" + tarRes + ".png")),80,80,false,false);
             } else {
-                resPic = new Image(Utility.getImageRes("/rotation/CR/" +tarRes+".png"),80,80,false,false);
+                resPic = new Image(Objects.requireNonNull(Utility.getImageRes("/rotation/CR/" + tarRes + ".png")),80,80,false,false);
             }
             ImageView res = new ImageView();
             res.setImage(resPic);

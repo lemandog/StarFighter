@@ -1,4 +1,4 @@
-package Frames;
+package org.lemandog.Frames;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -13,22 +13,22 @@ import javafx.scene.shape.Box;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.example.*;
+import org.lemandog.*;
+import org.lemandog.jdbc.Control;
 
 
 import java.util.LinkedList;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static Frames.App.*;
+import static org.lemandog.Frames.App.*;
 
 public class Game {
     static int score = 0;
     public static Player mainP;
     static LinkedList<Enemy> thisGameList;
     public static void startGame(int i) {
-        Utility.saveSettings(Utility.loadSettings(0),Utility.loadSettings(1),Utility.loadSettings(2), Utility.loadSettings(3)); //From file to programm
-        int levelLen = Utility.loadLevel(i); // Level lenght from file
+        int levelLen = Utility.loadLevelLen(i); // Level lenght from file
         SoundHandler.takeMusicAdress(i);     //Sound handler from file
 
         thisGameList = Enemy.constructEnemyFromFile(i);
@@ -98,9 +98,6 @@ Thread gameCycle = new Thread(() -> {
         }
     }
     Utility.debugOutput("GAME CYCLE OVER");
-    if(!endNotMet && playerIsAlive && i != 0){
-        Utility.progressLevel(i);
-    }
     thisGameList.clear();
 
     boolean finalPlayerIsAlive = playerIsAlive;

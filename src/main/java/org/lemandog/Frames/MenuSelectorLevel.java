@@ -1,15 +1,14 @@
-package Frames;
+package org.lemandog.Frames;
 
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
-import org.example.Utility;
+import org.lemandog.Utility;
+import org.lemandog.jdbc.Control;
 
-import java.awt.*;
-
-import static Frames.MenuSelector.*;
-import static Frames.App.winHeight;
-import static Frames.App.winWidth;
+import static org.lemandog.Frames.MenuSelector.*;
+import static org.lemandog.Frames.App.winHeight;
+import static org.lemandog.Frames.App.winWidth;
 
 public class MenuSelectorLevel {
     public static Text gamemode = new Text("Campain / Arcade");
@@ -22,7 +21,7 @@ public class MenuSelectorLevel {
     public static Text lvl4 = new Text("LVL 4");
     public static Text lvl5 = new Text("LVL 5");
     public static Text lvl6 = new Text("GRAND FINALE");
-    public static int offsetLevel = Utility.getAvailableLevels();
+    public static int offsetLevel = Integer.parseInt(Control.currentSave());
 
     static buttonFunc selButton = buttonFunc.FREEMODE;
 
@@ -201,12 +200,12 @@ public class MenuSelectorLevel {
                     App.getStage().setScene(App.sceneMM);
                     break;}
                 case FREEMODE:{Game.startGame(0); break;}
-                case LVL1:{if (MenuSettings.comicShow != 1){Game.startGame(1);} else{ Comic.construct(1);} break;}
-                case LVL2:{if (MenuSettings.comicShow != 1){Game.startGame(2);} else{ Comic.construct(2);} break;}
-                case LVL3:{if (MenuSettings.comicShow != 1){Game.startGame(3);} else{ Comic.construct(3);} break;}
-                case LVL4:{if (MenuSettings.comicShow != 1){Game.startGame(4);} else{ Comic.construct(4);} break;}
-                case LVL5:{if (MenuSettings.comicShow != 1){Game.startGame(5);} else{ Comic.construct(5);} break;}
-                case LVL6:{if (MenuSettings.comicShow != 1){Game.startGame(6);} else{ Comic.construct(6);} break;}
+                case LVL1:{if (!MenuSettings.comicShow){Game.startGame(1);} else{ Comic.construct(1);} break;}
+                case LVL2:{if (!MenuSettings.comicShow){Game.startGame(2);} else{ Comic.construct(2);} break;}
+                case LVL3:{if (!MenuSettings.comicShow){Game.startGame(3);} else{ Comic.construct(3);} break;}
+                case LVL4:{if (!MenuSettings.comicShow){Game.startGame(4);} else{ Comic.construct(4);} break;}
+                case LVL5:{if (!MenuSettings.comicShow){Game.startGame(5);} else{ Comic.construct(5);} break;}
+                case LVL6:{if (!MenuSettings.comicShow){Game.startGame(6);} else{ Comic.construct(6);} break;}
             }
         }
 

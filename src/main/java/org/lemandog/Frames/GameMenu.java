@@ -1,14 +1,14 @@
-package Frames;
+package org.lemandog.Frames;
 
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Font;
-import org.example.Utility;
+import org.lemandog.Utility;
 
 import java.util.Objects;
 
-import static Frames.App.*;
+import static org.lemandog.Frames.App.*;
 
 
 //In fact, this class contains only links to resoureces and basic Group construction.
@@ -21,8 +21,8 @@ public class GameMenu {
 
     public static Group construct() {
         menu = new Group();
-        ImageView logo = new ImageView(Utility.getImageRes("/menu/logo3.png"));
-        Image backg3 = new Image(Utility.getImageRes("/backg/backgPL" + picOfChoice + ".png"), winWidth, winHeight, false, false);
+        ImageView logo = new ImageView(Objects.requireNonNull(Utility.getImageRes("/menu/logo3.png")));
+        Image backg3 = new Image(Objects.requireNonNull(Utility.getImageRes("/backg/backgPL" + picOfChoice + ".png")), winWidth, winHeight, false, false);
         ImageView backgV3 = new ImageView(backg3);
         menu.getChildren().add(backgV3);
         menu.getChildren().add(logo);//Logo is on top

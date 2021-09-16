@@ -1,6 +1,6 @@
-package org.example;
+package org.lemandog;
 
-import Frames.App;
+import org.lemandog.Frames.App;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.Image;
@@ -11,9 +11,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-import static Frames.App.winWidth;
-import static Frames.Game.mainP;
-import static org.example.Utility.documentsPath;
+import static org.lemandog.Frames.App.winWidth;
+import static org.lemandog.Frames.Game.mainP;
+import static org.lemandog.Utility.documentsPath;
 
 public class Enemy {
     public long waitTo; //Nanoseconds.
@@ -133,7 +133,7 @@ public class Enemy {
         } else {
             tarRes = String.format("%04d", (30 - angle));
         }
-        return new Image(Utility.getImageRes("/enemy/"+ this.type +"/" + tarRes +".png"),80,80,false,false);
+        return new Image(Objects.requireNonNull(Utility.getImageRes("/enemy/" + this.type + "/" + tarRes + ".png")),80,80,false,false);
     }
 
     private double moveSet(int type , double yCord){

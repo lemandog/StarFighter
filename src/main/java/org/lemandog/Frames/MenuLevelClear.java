@@ -1,4 +1,4 @@
-package Frames;
+package org.lemandog.Frames;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -6,11 +6,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import org.example.SoundHandler;
-import org.example.Utility;
+import org.lemandog.SoundHandler;
+import org.lemandog.Utility;
+import org.lemandog.jdbc.Control;
 
-import static Frames.App.winHeight;
-import static Frames.App.winWidth;
+import java.util.Objects;
+
+import static org.lemandog.Frames.App.winHeight;
+import static org.lemandog.Frames.App.winWidth;
 public class MenuLevelClear {
     static Color sel = Utility.getColorFromPallete(19);
     static Color hover = Utility.getColorFromPallete(22);
@@ -56,11 +59,11 @@ public class MenuLevelClear {
 
         if (playerIsAlive && !endNotMet) {
             gameover.setText("Level clear!");
-            backg = new ImageView(Utility.getImageRes("/menu/End1.png"));
+            backg = new ImageView(Objects.requireNonNull(Utility.getImageRes("/menu/End1.png")));
             outcome = true;
         } else {
             gameover.setText("Mission failed!");
-            backg = new ImageView(Utility.getImageRes("/menu/End2.png"));
+            backg = new ImageView(Objects.requireNonNull(Utility.getImageRes("/menu/End2.png")));
             outcome = false;
         }
         gameoverLayout.getChildren().add(backg);
@@ -128,14 +131,16 @@ public class MenuLevelClear {
         }
 
         public static void func() {
+            if (outcome) {
+                Utility.debugOutput("Progressing: to" + (6 - sLevel));
+                Control.progressLevel(6 - sLevel);}
             switch (MenuLevelClear.selButton) {
                 case EXIT: {
                     System.exit(0);
                     break;
                 }
                 case START: {
-                    if (outcome) {Utility.progressLevel(sLevel);}
-                    MenuSelectorLevel.offsetLevel = Utility.getAvailableLevels();
+                    MenuSelectorLevel.offsetLevel = Integer.parseInt(Control.currentSave());
                     MenuSelectorLevel.selectMode();
                     break;
                 }

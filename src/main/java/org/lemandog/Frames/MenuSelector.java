@@ -1,12 +1,12 @@
-package Frames;
+package org.lemandog.Frames;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import org.example.Utility;
+import org.lemandog.Utility;
 
-import static Frames.App.winHeight;
-import static Frames.App.winWidth;
+import static org.lemandog.Frames.App.winHeight;
+import static org.lemandog.Frames.App.winWidth;
 
 public class MenuSelector {
     static Color hover = Utility.getColorFromPallete(22);

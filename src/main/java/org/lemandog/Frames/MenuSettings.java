@@ -1,24 +1,25 @@
-package Frames;
+package org.lemandog.Frames;
 
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
-import org.example.Utility;
+import org.lemandog.Utility;
+import org.lemandog.jdbc.Control;
 
-import static Frames.MenuSelector.*;
-import static Frames.App.winHeight;
-import static Frames.App.winWidth;
+import static org.lemandog.Frames.MenuSelector.*;
+import static org.lemandog.Frames.App.winHeight;
+import static org.lemandog.Frames.App.winWidth;
 
 public class MenuSettings {
-    public static int volume = Utility.loadSettings(0);
+    public static int volume = Integer.parseInt(Control.loadSettings(1));
     public static Text volumeT = new Text("Music vol: " + volume);
-    public static int volumeS = Utility.loadSettings(1);
+    public static int volumeS = Integer.parseInt(Control.loadSettings(2));
     public static Text volumeTS = new Text("Sound vol: " + volumeS);
-    public static int comicShow = Utility.loadSettings(2);
+    public static boolean comicShow = Boolean.parseBoolean(Control.loadSettings(3));
     public static Text comicT = new Text("Show plot comics: " + comicShow);
     public static Text author = new Text("Authors");
     public static Text resetSave = new Text("Reset Save file");
-    static public int showDebug = Utility.loadSettings(3);
+    static public boolean showDebug = Boolean.parseBoolean(Control.loadSettings(4));
     public static Text debugState = new Text("Show debug text: " + showDebug);
     public static Text toMainMenu = new Text("Return to menu");
 
@@ -183,21 +184,21 @@ public class MenuSettings {
         public static void func() {
             switch (selButton){
                 case PRE_LEVEL_COMIC:{
-                    if(comicShow == 0){comicShow = 1;}
-                    else {comicShow = 0;}
+                    comicShow=!comicShow;
                     comicT.setText("Show plot comics: " + comicShow);
                     break;}
                 case DEBUG:{
-                    if(showDebug == 1){showDebug = 0;} else {showDebug = 1;}
+                    showDebug = !showDebug;
                     debugState.setText("Show debug text: " + showDebug);
                     break;
                 }
                 case AUTHOR:{Utility.constructAuthorFrame(); break;}
                 case RESET_SAVE:{
                     resetSave.setFill(additional);
-                    Utility.resetSaveFile();break;}
+                    Control.resetSave();break;
+                }
                 case TO_MAIN_MENU:{
-                    Utility.saveSettings(volume,volumeS,comicShow,showDebug);
+                    Control.saveSettings(volume,volumeS,comicShow,showDebug);
                     App.sceneMM = new Scene(GameMenu.construct());
                     MenuSelector.startup();
                     App.getStage().setScene(App.sceneMM);

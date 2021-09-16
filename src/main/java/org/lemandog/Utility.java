@@ -1,8 +1,8 @@
-package org.example;
+package org.lemandog;
 
-import Frames.GameMenu;
-import Frames.MenuSelectorLevel;
-import Frames.MenuSettings;
+import org.lemandog.Frames.GameMenu;
+import org.lemandog.Frames.MenuSettings;
+import org.lemandog.enums.miskData;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,16 +14,12 @@ import javafx.stage.Stage;
 
 import javax.swing.*;
 import java.io.*;
-import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.Scanner;
 
 public class Utility {
-    static private final Image palette = new Image(getImageRes("/utility/pallete1.png"));
+    static private final Image palette = new Image(Objects.requireNonNull(getImageRes("/utility/pallete1.png")));
     static private final PixelReader inPix = palette.getPixelReader();
     static String documentsPath = new JFileChooser().getFileSystemView().getDefaultDirectory().getPath() + File.separator + "My Games"+ File.separator +"StarFighter";
-    static long loggercounter = 0;
 
 
     public static Color getColorFromPallete(int i) {
@@ -35,7 +31,7 @@ public class Utility {
 
     public static void constructInfoFrame() {
         BorderPane layout = new BorderPane();
-        Image backg = new Image(getImageRes("/menu/info.png"),960,550, false, false);
+        Image backg = new Image(Objects.requireNonNull(getImageRes("/menu/info.png")),960,550, false, false);
         ImageView backgV3 = new ImageView(backg);
         backgV3.setOpacity(0.4);
 
@@ -63,7 +59,7 @@ public class Utility {
         Stage info = new Stage();
         info.setResizable(false);
         info.setTitle("CONTROLS and INFO");
-        Image icon = new Image(getImageRes("/menu/icon.png"));
+        Image icon = new Image(Objects.requireNonNull(getImageRes("/menu/icon.png")));
         info.getIcons().add(icon);
 
         Scene infoData = new Scene(layout,960,550);
@@ -76,14 +72,14 @@ public class Utility {
     }
     public static void constructAuthorFrame() {
         BorderPane layout = new BorderPane();
-        Image backg = new Image(getImageRes("/menu/info.png"),960,550, false, false);
+        Image backg = new Image(Objects.requireNonNull(getImageRes("/menu/info.png")),960,550, false, false);
         ImageView backgV3 = new ImageView(backg);
         backgV3.setOpacity(0.4);
 
         Text data1 = new Text(" This game was made by Lemandog, Aldegida and Groza.\n" +
                 "   Latest version available on Lemandog`s github\n" +
                 "   This game is distributed on share-free basis, if someone sold \n" +
-                "you this game you was lied to.\n" +
+                "you this game you were lied to.\n" +
                 "\n"+
                 "   You are free to make any changes, but you cannot \n" +
                 "use original code and resources to make non share-free software \n" +
@@ -106,7 +102,7 @@ public class Utility {
         Stage info = new Stage();
         info.setResizable(false);
         info.setTitle("AUTHORS");
-        Image icon = new Image(getImageRes("/menu/icon.png"));
+        Image icon = new Image(Objects.requireNonNull(getImageRes("/menu/icon.png")));
         info.getIcons().add(icon);
 
         Scene infoData = new Scene(layout,960,550);
@@ -116,55 +112,6 @@ public class Utility {
         infoData.setFill(Color.BLACK);
         info.setScene(infoData);
         info.show();
-    }
-
-    public static int getAvailableLevels(){
-        try {
-            Scanner scanner = new Scanner(new File(documentsPath + File.separator+ "save.txt"));
-            MenuSelectorLevel.status.setText("Save file found");
-            if (scanner.hasNext()){return scanner.nextInt();}
-            else {throw new FileNotFoundException();}
-        } catch (FileNotFoundException e) {
-            new File(documentsPath + File.separator).mkdir();
-            new File(documentsPath + File.separator+ "save.txt");
-            MenuSelectorLevel.status.setText("New save created");
-            resetSaveFile();
-            return 6;
-        }
-    }
-    public static void resetSaveFile(){
-        try {
-            PrintWriter out = new PrintWriter(documentsPath + File.separator+ "save.txt");
-            out.print(6);
-            out.close();
-        }catch (FileNotFoundException e) {
-            MenuSelectorLevel.status.setText("cannot create file!");
-        }
-    }
-
-    public static void progressLevel(int i){
-        try {
-            Scanner scanner = new Scanner(new File(documentsPath + File.separator +"save.txt"));
-            if (scanner.hasNext()){
-                int number = scanner.nextInt();
-                if(number > (6-i) && number > 0){
-                    debugOutput("Save file found and read");
-                    PrintWriter out = new PrintWriter(documentsPath + File.separator +"save.txt");
-                    out.print(6-i);
-                    out.close();
-                }
-                scanner.close();
-            }
-            else {
-                throw new FileNotFoundException();
-            }
-
-
-        } catch (FileNotFoundException e) {
-            debugOutput("Problem with save file. Creating new...");
-            getAvailableLevels();
-        }
-
     }
 
     public static String getImageRes(String path){
@@ -177,71 +124,11 @@ public class Utility {
     }
 
 
-    public static int loadLevel(int i) {
-        int result = 0;
-        Scanner scanner = null;
-        try {
-            scanner = new Scanner(new File(documentsPath + File.separator +"misc.txt"));
-            if(scanner.hasNextLine()){
-                for(int x = 0;x<=i; x++){ //To needed level
-                    result =  scanner.nextInt();
-                }
-            }
-        } catch (FileNotFoundException e) {
-            generateMisc();
-            debugOutput("MISC FILE GENERATED! "+ i);
-            loadSettings(i);
-        }
-            debugOutput("Save file found LEVEL_LENGTH " + result + " NO "+ i);
-            return result;
-    }
-
-    private static void generateMisc() {
-        try {
-            PrintWriter out = new PrintWriter(documentsPath + File.separator +"misc.txt");
-            out.println(500000);
-            out.println(300000);
-            out.println(480000);
-            out.println(500000);
-            out.println(600000);
-            out.println(800000);
-            out.println(200000);
-            out.close();
-            debugOutput("New misc file generated");
-        }catch (FileNotFoundException e1){
-            debugOutput("Failed");
-        }
-    }
-
-    public static int loadSettings(int i) {
-        int result = 0;
-        try {
-            Scanner scanner = new Scanner(new File(documentsPath + File.separator +"settings.txt"));
-            if(scanner.hasNextLine()){
-                for(int x = 0;x<=i; x++){ //To needed level
-                    result =  scanner.nextInt();
-                }
-            }
-            return result;
-        } catch (FileNotFoundException | NoSuchElementException e) {
-            saveSettings(60,60,1, 1);
-            return loadSettings(i);
-        }
-    }
-    public static void saveSettings(int volM, int volS, int c, int debug) {
-        try {
-        PrintWriter out = new PrintWriter(documentsPath + File.separator +"settings.txt");
-        out.println(volM);
-        out.println(volS);
-        out.println(c);
-        out.println(debug);
-        out.close();
-        } catch (FileNotFoundException e) {
-            debugOutput("NO SETTINGS FILE FOUND! ");
-        }
+    public static int loadLevelLen(int i) {
+        return miskData.values()[i].levelLength;
     }
     public static void debugOutput(String text) {
-            if(MenuSettings.showDebug == 1){
+            if(MenuSettings.showDebug){
                 System.out.println(text);
             }
     }

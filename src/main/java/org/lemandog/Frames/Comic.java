@@ -1,4 +1,4 @@
-package Frames;
+package org.lemandog.Frames;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -6,14 +6,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import org.example.Utility;
+import org.lemandog.Utility;
 
-import java.io.File;
 import java.util.Objects;
 
-import static Frames.App.winHeight;
-import static Frames.App.winWidth;
+import static org.lemandog.Frames.App.winHeight;
+import static org.lemandog.Frames.App.winWidth;
 public class Comic {
     static boolean outcome;
     static int currPage=1;
